@@ -1,14 +1,21 @@
 package com.proyecto.userservice.application.service;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
+import com.proyecto.userservice.application.port.in.CreateUserUseCase;
+import com.proyecto.userservice.application.port.in.GetUserUseCase;
+import com.proyecto.userservice.application.port.out.UserRepositoryPort;
+import com.proyecto.userservice.domain.exception.UserAlreadyExistsException;
+import com.proyecto.userservice.domain.exception.UserNotFoundException;
+import com.proyecto.userservice.domain.model.Address;
 import com.proyecto.userservice.domain.model.User;
-import com.proyecto.userservice.domain.port.inbound.CreateUserUseCase;
-import com.proyecto.userservice.domain.port.outbound.UserRepositoryPort;
 
-public class UserService implements CreateUserUseCase {
 
+@Service
+public class UserService implements CreateUserUseCase, GetUserUseCase {
 
   private final UserRepositoryPort userRepositoryPort;
 
@@ -17,15 +24,23 @@ public class UserService implements CreateUserUseCase {
   }
 
   @Override
-  public User createUser(User user) {
-    User newUser = new User(
-      user.getId() != null ? user.getId() : UUID.randomUUID(),
-      user.getName(),
-      user.getEmail(),
-      user.getPassword(),
-      LocalDateTime.now()
-    );
+  public User createUser(String name, String email, String password, List<Address> addresses) {
+
+    if (userRepositoryPort.findByEmail(email).isPresent()) {
+      throw new UserAlreadyExistsException("El correo electronico" + email + " ya se encuentra registrado");
+    }
+
+    User newUser = new User(null, name, email, password, addresses, null);
+
     return userRepositoryPort.save(newUser);
+
   }
+
+  @Override
+  public User getUserById(UUID id) {
+    return userRepositoryPort.findById(id)
+      .orElseThrow(() -> new UserNotFoundException("No se encontro ningun usuario con el ID: " + id));
+  }
+
 
 }

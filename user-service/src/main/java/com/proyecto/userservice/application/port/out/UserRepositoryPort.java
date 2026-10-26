@@ -1,4 +1,4 @@
-package com.proyecto.userservice.domain.port.outbound;
+package com.proyecto.userservice.application.port.out;
 
 import java.util.Optional;
 import java.util.UUID;
