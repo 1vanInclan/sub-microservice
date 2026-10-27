@@ -39,6 +39,16 @@
       "projectName": "user-service",
       "args": "",
       "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-SubscriptionServiceApplication<subscription-service>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.proyecto.subscription_service.SubscriptionServiceApplication",
+      "projectName": "subscription-service",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

@@ -10,6 +10,10 @@ spring:
             uri: lb://user-service
             predicates:
             - path=/api/v1/users/**
+          - id: subscription-service-route
+            uri: lb://subscription-service
+            predicates:
+            - path=/api/v1/subscriptions/**
 server:
   port: 8080
 
